@@ -1,5 +1,6 @@
+#include "../Vector3D.cpp"
+
 #include <iostream>
-#include "Vector.cpp"
 using namespace std;
 
 void testnorm();
@@ -12,58 +13,65 @@ void testinit();
 int main ()
 {
     testnorm();
-    //testdiv();
-    //testmult();
-    // testsum();
-    // testmag();
+    testdiv();
+    testmult();
+    testsum();
+    testmag();
     // testinit();
     return 0;
 }
 
 void testnorm()
 {
-    Vector vec1 = {1.0, -2.0, -2.0};
-    Vector normVec1 = vec1.normalize();
-    cout << "normVec1 is " << normVec1.Y << endl;
+    Vector3D vec1 = Vector3D(1.0, -2.0, -2.0);
+    Vector3D normVec1 = vec1.normalize();
+    cout << "normVec1 is " << normVec1.y << endl;
 }
 
 void testdiv()
 {
-    Vector vec1 = {2.0, -2.0, -2.0};
+    Vector3D vec1 = {2.0, -2.0, -2.0};
 
-    Vector nConstProd = vec1 / 4;
-    cout << "nConstDiv.X is " << nConstProd.X << endl;
+    Vector3D nConstDiv = vec1 / 4;
+    if(nConstDiv.x == 0.5)
+        cout << "nConstDiv.x is " << nConstDiv.x << endl;
+    else
+        cout << "nConstDiv.x is not 0.5, it is " << nConstDiv.x << endl;
 }
 
 void testmult()
 {
-    Vector vec1 = {2.0, -2.0, -2.0};
+    Vector3D vec1 = {2.0, -2.0, -2.0};
 
-    Vector nConstProd = vec1 * 3;
-    cout << "nConstProd.X is " << nConstProd.X << endl;
+    Vector3D nConstProd = vec1 * 3;
+    if(nConstProd.x == 6.0)
+        cout << "nConstProd.x is " << nConstProd.x << endl;
+    else
+        cout << "nConstProd.x is not 6, it is " << nConstProd.x << endl;
 
-    Vector rConstProd = 3 * vec1;
-    cout << "rConstProd.X is " << rConstProd.X << endl;
+    Vector3D rConstProd = 3 * vec1;
+    if(rConstProd.x == 6.0)
+        cout << "rConstProd.x is " << rConstProd.x << endl;
+    else
+        cout << "rConstProd.x is not 6, it is " << rConstProd.x << endl;
 }
 
 void testsum()
 {
-    Vector vec1 = {1.0, -2.0, -2.0};
-    Vector vec2 = {3.0, 6.0, 9.0};
+    Vector3D vec1 = {1.0, -2.0, -2.0};
+    Vector3D vec2 = {3.0, 6.0, 9.0};
 
-    Vector sum = vec1 + vec2;
+    Vector3D sum = vec1 + vec2;
 
-    sum.printVector();
-
-    if(sum.X == 4.0)
-        cout << "sum.X is " << sum.X << endl;
+    if(sum.x == 4.0)
+        cout << "sum.x is " << sum.x << endl;
     else
-        cout << "vec.magnitude() is not 4, it is " << sum.X << endl;
+        cout << "vec.magnitude() is not 4, it is " << sum.x << endl;
 }
 
 void testmag()
 {
-    Vector vec = {1.0, -2.0, -2.0};
+    Vector3D vec = {1.0, -2.0, -2.0};
 
     if(vec.magnitude() == 3.0)
         cout << "vec.magnitude() is " << vec.magnitude() << endl;

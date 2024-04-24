@@ -1,3 +1,7 @@
 /.vscode/
 /Ignored/
+/Tests/
 *.exe
+*.o
+*.rar
+*.zip
