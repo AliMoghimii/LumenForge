@@ -1,35 +1,46 @@
-#include "Image.hpp"
 #include "Color.hpp"
+#include "Vector3D.hpp"
+#include "Sphere.hpp"
+#include "Object3D.hpp"
+#include "Scene.hpp"
+#include "Engine.hpp"
 
+#include <vector>
 #include <iostream>
 using namespace std;
 
-double width = 3;
-double height = 3;
+double width = 640;
+double height = 640;
 
 int main ()
 {
-    Image image =  Image(width, height);
+    Vector3D camera = Vector3D(0, 0, -1);
 
-    Color colorRed = Color(1, 0, 0);
-    Color colorGreen = Color(0, 1, 0);
-    Color colorBlue = Color(0, 0, 1);
+    Color color;
     
-    image.setPixel(0, 0, colorRed);
-    image.setPixel(1, 0, colorGreen);
-    image.setPixel(2, 0, colorBlue);
+    vector<Object3D*> Object3Ds;
+    Object3Ds.push_back(new Sphere(Vector3D(-0.5, -0.5, 0), 0.25, color.HexToRgb("#FF0000")));
+    Object3Ds.push_back(new Sphere(Vector3D(0, -0.5, 0), 0.25, color.HexToRgb("#00FF00")));
+    Object3Ds.push_back(new Sphere(Vector3D(0.5, -0.5, 0), 0.25, color.HexToRgb("#0000FF")));
+    Object3Ds.push_back(new Sphere(Vector3D(-0.5, 0, 0), 0.25, color.HexToRgb("#FFFF00+")));
+    Object3Ds.push_back(new Sphere(Vector3D(0, 0, 0), 0.25, color.HexToRgb("#00FFFF")));
+    Object3Ds.push_back(new Sphere(Vector3D(0.5, 0, 0), 0.25, color.HexToRgb("#FF00FF")));
+    Object3Ds.push_back(new Sphere(Vector3D(-0.5, 0.5, 0), 0.25, color.HexToRgb("#FFFFFF")));
+    Object3Ds.push_back(new Sphere(Vector3D(0, 0.5, 0), 0.25, color.HexToRgb("#FF8000")));
+    Object3Ds.push_back(new Sphere(Vector3D(0.5, 0.5, 0), 0.25, color.HexToRgb("#404040")));
 
-    image.setPixel(0, 1, colorRed + colorGreen);
-    image.setPixel(1, 1, colorBlue + colorGreen);
-    image.setPixel(2, 1, colorBlue + colorRed);
+    Scene scene = Scene(camera, Object3Ds, width, height) ;
 
-    image.setPixel(0, 2, colorRed + colorGreen + colorBlue);
-    image.setPixel(1, 2, colorRed + Color(0, 0.5, 0));
-    image.setPixel(2, 2, colorRed * 0.001);
+    Engine engine = Engine();
 
-    image.exportImage("test.ppm");
+    Image image =  engine.render(scene);
 
-    cout << " " << endl;
+    image.exportImage("01 - Render Test.ppm");
+
+    for (Object3D* obj : Object3Ds)
+    {
+        delete obj;
+    }
 
     return 0;
 }

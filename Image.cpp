@@ -1,18 +1,18 @@
 #include "Image.hpp"
 
-Image::Image(int w, int h) : w(w), h(h) 
+Image::Image(int width, int height) : width(width), height(height) 
 { 
-    this->w = w;
-    this->h = h;
+    this->width = width;
+    this->height = height;
     createImageCanvas();
 }
 
 void Image::createImageCanvas()
 {
-    pixels.resize(h);
-    for (int i = 0; i < h; ++i) 
+    pixels.resize(height);
+    for (int i = 0; i < height; ++i) 
     {
-        pixels[i].resize(w);
+        pixels[i].resize(width);
     }
 }
 
@@ -25,7 +25,7 @@ void Image::setPixel(int x, int y, Color color)
 {
     if (y >= 0 && y < pixels.size() && x >= 0 && x < pixels[y].size()) 
     {
-        cout << "Pixel added at (" << x << ", " << y << ")" << endl;
+        //cout << "Pixel added at (" << x << ", " << y << ")" << endl;
         pixels[y][x] = color;
     } 
     else 
@@ -44,7 +44,7 @@ void Image::exportImage(const string& filename)
             return;
         }
 
-        file << "P3 " << w << " " << h << "\n255\n";
+        file << "P3 " << width << " " << height << "\n255\n";
 
         for (auto row : pixels) 
         {

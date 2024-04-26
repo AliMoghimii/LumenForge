@@ -13,9 +13,11 @@ class Color
         double g;
         double b;
         
-    Color(double r = 0, double g = 0, double b = 0);
+    Color(double r = 0.0, double g = 0.0, double b = 0.0);
 
     void printColor() const;
+
+    Color HexToRgb(const string& hexValue = "#000000");
 
     Color operator+(Color other) const;
 

@@ -12,11 +12,11 @@ class Image
 {
     public: 
 
-        int w;
-        int h;
+        int width;
+        int height;
         vector<vector<Color>> pixels;
 
-    Image(int w = 0, int h = 0);
+    Image(int width = 0, int height = 0);
 
     void createImageCanvas();
 
