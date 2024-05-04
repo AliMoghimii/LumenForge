@@ -23,7 +23,7 @@ int Image::toByte(double character)
 
 void Image::setPixel(int x, int y, Color color)
 {
-    if (y >= 0 && y < pixels.size() && x >= 0 && x < pixels[y].size()) 
+    if(y >= 0 && y < pixels.size() && x >= 0 && x < pixels[y].size()) 
     {
         //cout << "Pixel added at (" << x << ", " << y << ")" << endl;
         pixels[y][x] = color;
@@ -38,7 +38,7 @@ void Image::exportImage(const string& filename)
 {
         ofstream file(filename);
 
-        if (!file.is_open()) 
+        if(!file.is_open()) 
         {
             cerr << "Error opening file: " << filename << endl;
             return;

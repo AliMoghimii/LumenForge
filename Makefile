@@ -1,6 +1,6 @@
 
-output: Raytracer.o Image.o Color.o Vector3D.o Engine.o Ray.o Sphere.o Object3D.o Scene.o
-	g++ Raytracer.o Image.o Color.o Vector3D.o Engine.o Ray.o Sphere.o Object3D.o Scene.o -o output
+output: Raytracer.o Image.o Color.o Vector3D.o Engine.o Ray.o Object3DSphere.o Object3D.o Scene.o Light.o MaterialNormal.o MaterialCheckered.o Material.o
+	g++ Raytracer.o Image.o Color.o Vector3D.o Engine.o Ray.o Object3DSphere.o Object3D.o Scene.o Light.o MaterialNormal.o MaterialCheckered.o Material.o -o output
 
 Raytracer.o: Raytracer.cpp
 	g++ -c Raytracer.cpp
@@ -20,8 +20,8 @@ Engine.o: Engine.cpp
 Ray.o: Ray.cpp
 	g++ -c Ray.cpp
 
-Sphere.o: Sphere.cpp
-	g++ -c Sphere.cpp	
+Object3DSphere.o: Object3DSphere.cpp
+	g++ -c Object3DSphere.cpp	
 	
 Object3D.o: Object3D.cpp
 	g++ -c Object3D.cpp
@@ -29,6 +29,17 @@ Object3D.o: Object3D.cpp
 Scene.o: Scene.cpp
 	g++ -c Scene.cpp	
 
+Light.o: Light.cpp
+	g++ -c Light.cpp
+
+MaterialNormal.o: MaterialNormal.cpp
+	g++ -c MaterialNormal.cpp
+
+MaterialCheckered.o: MaterialCheckered.cpp
+	g++ -c MaterialCheckered.cpp
+
+Material.o: Material.cpp
+	g++ -c Material.cpp
 
 run: output
 	./output

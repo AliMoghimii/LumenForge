@@ -1,7 +1,9 @@
 #include "Engine.hpp"
 
-Image Engine::render(const Scene& scene)
+Image Engine::render(const Scene& scene, bool shaded)
 {
+    this->shaded = shaded;
+
     int width = scene.width;
     int height = scene.height;
     double aspectRatio = static_cast<double>(width) / height;
@@ -23,9 +25,10 @@ Image Engine::render(const Scene& scene)
         for (int i = 0; i < width; ++i) 
         {
             float x = x0 + i * xdelta;
-            Ray ray = Ray(camera, Vector3D(x, y, 0) - camera);
+            Ray ray = Ray(camera, Vector3D(x, y) - camera);
             canvas.setPixel(i, j, raytrace(ray, scene));
         }
+
         double progress = (double)(j) / height * 100;
         cout << "Rendering: In Progress (" << (int) progress << "%)";
         cout.flush();
@@ -35,42 +38,84 @@ Image Engine::render(const Scene& scene)
     return canvas;
 }
 
-Color Engine::raytrace(const Ray& ray, const Scene& scene)
+Color Engine::raytrace(const Ray& ray, const Scene& scene, int depth)
 {
     Color color = Color(0, 0, 0);
 
     double distanceHit;
-    Object3D* Object3DHit;
+    Object3D* objectHit;
 
-    tie(Object3DHit, distanceHit) = getRayHit(ray, scene);
+    tie(objectHit, distanceHit) = rayCollision(ray, scene);
     
-    if (Object3DHit == nullptr) 
+    if(objectHit == nullptr) 
         return color;
 
-    Vector3D hitPos = ray.origin + ray.direction * distanceHit;
-    color = color + colorAccumulation(Object3DHit, hitPos, scene);
+    Vector3D hitPosition = ray.origin + ray.direction * distanceHit;
+    Vector3D hitNormal = objectHit->object3DNormal(hitPosition);
+
+    color = color + colorBlending(objectHit, hitPosition, hitNormal, scene);
+
+    if(depth < this->maxDepth)
+    {
+        Vector3D newRayOrigin = hitPosition + hitNormal * this->minDisplacement;
+        Vector3D newRayDirection = ray.direction - 2 * ray.direction.dot(hitNormal) * hitNormal;
+        Ray reflectedRay = Ray(newRayOrigin, newRayDirection, false);
+        color = color + raytrace(reflectedRay, scene, depth + 1) * objectHit->material->reflection;
+    }
+
     return color;
 }
 
-pair<Object3D*, float> Engine::getRayHit(const Ray& ray, const Scene& scene)
+pair<Object3D*, float> Engine::rayCollision(const Ray& ray, const Scene& scene)
 {
     double distanceMin = DBL_MAX;
-    Object3D* Object3DHit = nullptr;
+    Object3D* objectHit = nullptr;
 
-    for (Object3D* obj : scene.Object3Ds) 
+    for (Object3D* object : scene.objects) 
     {
-        float distance = obj->Object3DIntersects(ray);
-        if ((distance != -1) && (Object3DHit == nullptr || distance < distanceMin)) 
+        float distance = object->object3DIntersects(ray);
+        if((distance != -1) && (objectHit == nullptr || distance < distanceMin)) 
         {
             distanceMin = distance;
-            Object3DHit = obj;
+            objectHit = object;
         }
     }
 
-    return make_pair(Object3DHit, distanceMin);
+    return make_pair(objectHit, distanceMin);
 }
 
-Color Engine::colorAccumulation(Object3D* Object3DHit, const Vector3D& hitPosition, const Scene& scene) 
+Color Engine::colorBlending(Object3D* objectHit, const Vector3D& hitPosition, const Vector3D& hitNormal, const Scene& scene) 
 {
-    return Object3DHit->material;
+    if(!this->shaded)
+        return objectHit->material->colorA;
+
+    Material* objectHitMaterial = objectHit->material;
+    Color objectHitColor = objectHitMaterial->colorBlendingProperties(hitPosition); 
+    Ray rayToCamera = Ray(hitPosition, scene.camera - hitPosition, false);
+    Color newColor = objectHitMaterial->ambient * newColor.HexToRgb("#FFFFFF");
+
+    double shadowDetectDistanceHit;
+    Object3D* shadowDetectObjectHit;
+    
+    for (Light* light : scene.lights)
+    {
+        Ray rayToLight = Ray(hitPosition, light->position - hitPosition);
+        // tie(shadowDetectObjectHit, shadowDetectDistanceHit) = rayCollision(rayToLight, scene);
+        // if(shadowDetectObjectHit == nullptr || shadowDetectDistanceHit > (light->position - hitPosition).magnitude()) 
+        newColor = newColor + lambertianShading(objectHitMaterial, objectHitColor, hitNormal, rayToLight);
+        newColor = newColor + blingPhongShading(objectHitMaterial, *light, hitNormal, rayToLight, rayToCamera, 50);
+    }
+
+    return newColor;
+}
+
+Color Engine::lambertianShading(const Material* objectHitMaterial, const Color& objectHitColor, const Vector3D& hitNormal, const Ray& rayToLight) 
+{
+    return objectHitColor * objectHitMaterial->diffuse * max(hitNormal.dot(rayToLight.direction), 0.0);
+}
+
+Color Engine::blingPhongShading(const Material* objectHitMaterial, const Light& light, const Vector3D& hitNormal, const Ray& rayToLight, const Ray& rayToCamera, double specularExponent) 
+{
+    Vector3D halfVector = (rayToLight.direction + rayToCamera.direction).normalize();
+    return light.color * objectHitMaterial->specular * pow(max(hitNormal.dot(halfVector), 0.0),  specularExponent);
 }

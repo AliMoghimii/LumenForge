@@ -14,7 +14,7 @@ class Ray
         Vector3D origin;
         Vector3D direction;
 
-    Ray(Vector3D origin, Vector3D direction);
+    Ray(Vector3D origin, Vector3D direction, bool normalize = true);
 };
 
 #endif

@@ -1,9 +1,10 @@
 #include "Scene.hpp"
 
-Scene::Scene(Vector3D camera, vector<Object3D*> Object3Ds, int width, int height)
+Scene::Scene(Vector3D camera, vector<Object3D*> objects, vector<Light*> lights, int width, int height)
 {
     this->camera = camera;
-    this->Object3Ds = Object3Ds;
+    this->objects = objects;
+    this->lights = lights;
     this->width = width;
     this->height = height;
 }

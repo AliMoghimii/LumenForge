@@ -1,9 +1,9 @@
-#ifndef Object3D_H
-#define Object3D_H
+#ifndef OBJECT3D_H
+#define OBJECT3D_H
 
 #include "Vector3D.hpp"
 #include "Ray.hpp"
-#include "Color.hpp"
+#include "Material.hpp"
 
 #include <math.h>
 #include <iostream>
@@ -13,12 +13,14 @@ class Object3D
 {
     public:
 
-        string name;
-        Color material;
-
+        Vector3D center;
+        Material* material;
+        
     Object3D();
 
-    virtual double Object3DIntersects(const Ray& ray) const;
+    virtual double object3DIntersects(const Ray& ray) const;
+    
+    virtual Vector3D object3DNormal(Vector3D surfacePoint);
 };
 
 #endif
