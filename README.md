@@ -1,7 +1,9 @@
 # Lumen Forge (W.I.P)
 
 A basic Raytracer with no external dependencies, implemented in C/C++ as part of my 3D graphics and computer simulations learning process. feel free to fork, comment suggestions, tips or add pull requests. </br>
-</br>**NOTE: This project is a work in progress.**
+
+> [!NOTE]  
+> This project is a work in progress.
 
 # Step-by-Step Results
 
