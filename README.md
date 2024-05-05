@@ -8,9 +8,9 @@ A basic Raytracer with no external dependencies, implemented in C/C++ as part of
 # Step-by-Step Results
 
 <div align="center">
-    <img src="https://github.com/AliMoghimii/LumenForge/blob/main/Results/01%20-%20Render%20Test.png" width="360" height="360">
-    <img src="https://github.com/AliMoghimii/LumenForge/blob/main/Results/02%20-%20Shading%20Test.png" width="360" height="360">
-    <img src="https://github.com/AliMoghimii/LumenForge/blob/main/Results/03%20-%20Reflection%20Test.png" width="720" height="405">
+    <img src="https://github.com/AliMoghimii/LumenForge-CPP-Raytracer/blob/main/Results/01%20-%20Render%20Test.png" width="360" height="360">
+    <img src="https://github.com/AliMoghimii/LumenForge-CPP-Raytracer/blob/main/Results/02%20-%20Shading%20Test.png" width="360" height="360">
+    <img src="https://github.com/AliMoghimii/LumenForge-CPP-Raytracer/blob/main/Results/03%20-%20Reflection%20Test.png" width="720" height="405">
 </div>
 
 # Manual compile examples
